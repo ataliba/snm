@@ -1,0 +1,76 @@
+Simple Network Monitoring Program 
+
+Este eh um pequeno programa que tem a intencao de monitorar se um
+servico esta on line ou nao. 
+Para isto eh utilizado o programa netcat ( o famoso canivete suico dos
+administradores de redes ) e ferramentas shell padrao. 
+Com isto temos uma ferramenta simples que atende aos propositos
+principais para as quais foi projetada. 
+
+Escolha um local no seu sistema para rodar o mesmo. Aconselharia 
+
+/opt/snm
+
+Copie para este diretorio o script monitora.sh e o diretorio que
+contem o arquivo de configuracao, de nome etc. 
+
+Apos isto, voce precisa configurar o programa para que ele rode : 
+
+Configure as localizacoes do comando date e do comando netcat do seu
+sistema operacional.
+
+Depois, configure o path aonde estao o seus arquivos de configuracao.
+No caso deste exemplo 
+
+SNMDIR=/opt/snm/etc
+
+
+Depois, coloque o email que vai receber os alertas, e caso queira
+receber alertas no seu celular, a sua operadora tem que oferecer este
+servico. 
+Assim, voce coloca o email que converte para sms as mensagens
+remetidas para o mesmo. 
+
+Ao final, voce vai ter mais ou menos o que esta listado abaixo, no
+inicio do script monitora.sh : 
+
+# LOCALIZACAO DOS COMANDOS ( MODIFICAR PARA OS PATHS DO SEU SISTEMA ) 
+DATE=/bin/date
+NETCAT=/bin/netcat
+# Configure estas variáveis para os locais do seu sistema 
+SNMDIR=./etc
+CONFIG=$SNMDIR/snm.conf
+ARQUIVO_LOOP=$SNMDIR/loop.lp
+LOG=$SNMDIR/monitoring.log
+CEL="seunumero@suapoeradora.com.br"
+EMAIL="seuemail@seudominio.com.brr"
+
+Com isto, voce deve passar para o arquivo de configuracao, snm.conf 
+
+O arquivo tem o seguinte formato 
+
+URL A SER MONITORADA|PORTADOSERVICO
+
+Se quiser monitorar a porta 80 do site ataliba.eti.br 
+
+ataliba.eti.br|80
+
+
+Cada site/porta a ser monitorado ocupa uma linha do arquivo de
+configuracao. 
+
+Apos efetuar tudo isto, rode o comando : 
+
+# sh monitora.sh configura 
+
+E pronto, seu script ja esta pronto para ir para o cron 
+
+Execute os comandos : 
+
+# chmod 755 /opt/snm/monitora.sh 
+# crontab -e 
+
+*/5 * * * * /opt/snm/monitora.sh > /dev/null
+
+Agora, eh so aguardar os alertas :-) 
+
